@@ -1,0 +1,35 @@
+#!/bin/bash
+
+PYTHON=python3
+
+# Get the repository URL
+REPO_URL=$(git config --get remote.origin.url)
+
+# Read instructor repository from config
+INSTRUCTOR_REPO=$($PYTHON -c "import json; print(json.load(open('.savemyass/_config.json'))['instructor_repository'])")
+
+# If this is the instructor's repository, no decryption needed
+if [ "$REPO_URL" = "$INSTRUCTOR_REPO" ]; then
+    exit 0
+fi
+
+# Check if secret file exists and is not empty
+if [ ! -f ".savemyass/.secret" ] || [ ! -s ".savemyass/.secret" ]; then
+    echo "Warning: .secret file is missing or empty. Files will remain encrypted."
+    exit 1
+fi
+
+PASSPHRASE=$(cat .savemyass/.secret)
+
+# Get assignment files from config
+ASSIGNMENTS=$($PYTHON -c "import json; print(' '.join(json.load(open('.savemyass/_config.json'))['assignments']))")
+
+# Decrypt each matching file
+for pattern in $ASSIGNMENTS; do
+    for file in $(find . -path "./$pattern" -type f); do
+        relative_path=${file#./}
+        $PYTHON .savemyass/_e.py decrypt "$file" "$PASSPHRASE"
+    done
+done
+
+exit 0

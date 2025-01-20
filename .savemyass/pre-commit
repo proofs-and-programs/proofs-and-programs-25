@@ -1,0 +1,53 @@
+#!/bin/bash
+
+PYTHON=python3
+
+# Get the repository URL
+REPO_URL=$(git config --get remote.origin.url)
+
+# Read instructor repository from config
+INSTRUCTOR_REPO=$($PYTHON -c "import json; print(json.load(open('.savemyass/_config.json'))['instructor_repository'])")
+
+# If this is the instructor's repository, allow commit without encryption
+if [ "$REPO_URL" = "$INSTRUCTOR_REPO" ]; then
+    exit 0
+fi
+
+# Get assignment files from config
+ASSIGNMENTS=$($PYTHON -c "import json; print(' '.join(json.load(open('.savemyass/_config.json'))['assignments']))")
+
+# Check if any staged files match assignment patterns
+NEEDS_ENCRYPTION=0
+for pattern in $ASSIGNMENTS; do
+    for file in $(find . -path "./$pattern" -type f); do
+        relative_path=${file#./}
+        if git diff --cached --name-only | grep -q "^${relative_path}$"; then
+            NEEDS_ENCRYPTION=1
+            break 2
+        fi
+    done
+done
+
+# Only check passphrase if we need to encrypt files
+if [ $NEEDS_ENCRYPTION -eq 1 ]; then
+    if [ ! -f ".savemyass/.secret" ] || [ ! -s ".savemyass/.secret" ]; then
+        echo "Error: .secret file is missing or empty. Please create .savemyass/.secret with a passphrase."
+        exit 1
+    fi
+    
+    PASSPHRASE=$(cat .savemyass/.secret)
+
+    # Encrypt staged assignment files
+    for pattern in $ASSIGNMENTS; do
+        for file in $(find . -path "./$pattern" -type f); do
+            relative_path=${file#./}
+            if git diff --cached --name-only | grep -q "^${relative_path}$"; then
+                $PYTHON .savemyass/_e.py encrypt "$file" "$PASSPHRASE"
+                git add "$file"
+                $PYTHON .savemyass/_e.py decrypt "$file" "$PASSPHRASE"
+            fi
+        done
+    done
+fi
+
+exit 0

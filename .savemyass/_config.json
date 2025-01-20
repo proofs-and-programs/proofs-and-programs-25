@@ -1,0 +1,6 @@
+{
+  "instructor_repository": "https://github.com/proofs-and-programs/proofs-and-programs-25",
+  "assignments": [
+    "PfsProgs25/Labs/*.lean"
+  ]
+}

@@ -1,4 +1,10 @@
+import PfsProgs25.Labs.TermsAndProofs
 import PfsProgs25.Unit00.Egs
+import PfsProgs25.Unit01.SimpleTerms
+import PfsProgs25.Unit02.PropsProofs
+import PfsProgs25.Unit03.NatLe
+import PfsProgs25.Unit03.NatSqrt
+import PfsProgs25.Unit04.Answer
 /-!
 # Proofs and Programs 2025
 
