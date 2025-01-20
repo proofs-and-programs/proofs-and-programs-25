@@ -7,7 +7,9 @@ import PfsProgs25.Unit03.NatSqrt
 import PfsProgs25.Unit04.NatDouble
 import PfsProgs25.Unit04.ShortAnswer
 import PfsProgs25.Unit05.Answer
+import PfsProgs25.Unit05.HCF
 import PfsProgs25.Unit05.MyInductives
+import PfsProgs25.Unit05.PowerIrrationals
 /-!
 # Proofs and Programs 2025
 
