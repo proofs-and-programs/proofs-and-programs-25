@@ -27,3 +27,26 @@ theorem exists_irrationals_pow_rational :
       · simp [irrational_iff_ne_rational, sq2_pow_twice]
     · use sqrt_two, sqrt_two
       simp [irrational_sqrt_two, c]
+
+structure IrrationalPairWithRationalPower where
+  a : ℝ
+  b : ℝ
+  aIrrational : Irrational a
+  bIrrational : Irrational b
+  abRational : ¬ Irrational (a ^ b)
+
+noncomputable def irrationalPairWithRationalPower :
+    IrrationalPairWithRationalPower := by
+  apply Classical.choice
+  let ⟨a, b, pf₁, pf₂, pf₃⟩ := exists_irrationals_pow_rational
+  use a, b, pf₁, pf₂, pf₃
+
+noncomputable def irrationalPairWithRationalPower' :
+    {ab : ℝ × ℝ  //
+      Irrational ab.1 ∧ Irrational ab.2 ∧ ¬ Irrational (ab.1 ^ ab.2)} := by
+      apply Classical.choice
+      let ⟨a, b, pf⟩ := exists_irrationals_pow_rational
+      use (a, b)
+
+noncomputable def magicPair : ℝ × ℝ :=
+  (irrationalPairWithRationalPower.a, irrationalPairWithRationalPower.b)
