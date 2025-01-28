@@ -184,3 +184,24 @@ The existential quantifier is defined as an inductive type.
 -/
 inductive MyExists {α : Type u} (p : α → Prop) where
 | mk (w : α) (h : p w) : MyExists p
+
+inductive MyNat.Le : MyNat → MyNat → Prop where
+| refl (n : MyNat) : MyNat.Le n n
+| step (n m : MyNat) : MyNat.Le n m → MyNat.Le n (MyNat.succ m)
+
+instance : LE MyNat where
+  le := MyNat.Le
+
+theorem MyNat.le_trans : ∀ x y z : MyNat, x ≤  y → y ≤ z → x ≤ z := by
+  intro x y z h₁ h₂
+  cases h₁
+  case refl =>
+    assumption
+  case step h =>
+   induction h₂ with
+    | refl  =>
+      apply MyNat.Le.step
+      assumption
+    | step n h₂ ih =>
+      apply MyNat.Le.step
+      apply ih
