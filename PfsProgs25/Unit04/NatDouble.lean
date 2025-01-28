@@ -11,6 +11,9 @@ def Nat.double (n: Nat) : Nat :=
 
 #eval Nat.double 5 -- 10
 
+/-!
+Double of a natural number defined in a more complicated way.
+-/
 def Nat.double' (n: Nat) : Nat :=
   match p:n with
   | 0 => 0
@@ -22,8 +25,11 @@ def Nat.double' (n: Nat) : Nat :=
 
 #eval Nat.double' 5 -- 10
 
-partial def Nat.double'' (n: Nat) : Nat :=
+/-!
+A non-terminating function defined using `match`.
+-/
+partial def Nat.notDouble (n: Nat) : Nat :=
   match n with
-  | m => double'' m + 2
+  | m => notDouble m + 2
 
 -- #eval Nat.double'' 5 -- Don't do this!

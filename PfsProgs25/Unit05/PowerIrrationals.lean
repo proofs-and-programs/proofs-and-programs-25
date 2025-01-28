@@ -9,44 +9,75 @@ An interesting example of a non-constructive proof is the following:
 
 We can prove this in Lean. But a function that returns such a pair of numbers has to be defined as `noncomputable` in Lean.
 -/
-noncomputable abbrev sqrt_two := Real.sqrt 2
 
-theorem sq2_pow_twice : ((sqrt_two) ^ sqrt_two) ^ sqrt_two = 2 := by
+/--
+The square root of `2` (an abbreviation).
+-/
+noncomputable abbrev sqrt2 : ℝ := Real.sqrt 2
+
+/--
+The equation `(sqrt2^sqrt2)^sqrt2 = 2`.
+-/
+theorem sq_sq_sq_sqrt2_rational :
+  (sqrt2^sqrt2)^sqrt2 = 2 := by
   rw [← Real.rpow_mul, Real.mul_self_sqrt]
   · simp
   · simp
-  · apply Real.sqrt_nonneg
+  · simp
 
-theorem exists_irrationals_pow_rational :
-  ∃ a b : ℝ, (Irrational a) ∧ (Irrational b) ∧ ¬ (Irrational (a ^ b)) := by
-    by_cases c:Irrational (sqrt_two ^ sqrt_two)
-    · use sqrt_two ^ sqrt_two, sqrt_two
-      simp [c]
-      apply And.intro
-      · apply irrational_sqrt_two
-      · simp [irrational_iff_ne_rational, sq2_pow_twice]
-    · use sqrt_two, sqrt_two
-      simp [irrational_sqrt_two, c]
+example :
+  (sqrt2^sqrt2)^sqrt2 = 2 := by
+  rw [← Real.rpow_mul, Real.mul_self_sqrt] <;> simp
 
-structure IrrationalPairWithRationalPower where
-  a : ℝ
-  b : ℝ
-  aIrrational : Irrational a
-  bIrrational : Irrational b
-  abRational : ¬ Irrational (a ^ b)
+/--
+There exists an irrational numbers `a` and `b` such that `a^b` is rational.
+-/
+theorem irrational_power_irrational_rational :
+  ∃ (a b : ℝ), Irrational (a) ∧ Irrational b ∧
+    ¬ Irrational (a^b)  := by
+  by_cases h : Irrational (sqrt2^sqrt2)
+  case pos =>
+    use sqrt2 ^ sqrt2, sqrt2
+    simp [h, sq_sq_sq_sqrt2_rational, irrational_sqrt_two]
+  case neg =>
+    use sqrt2, sqrt2
+    simp [irrational_sqrt_two]
+    assumption
 
-noncomputable def irrationalPairWithRationalPower :
-    IrrationalPairWithRationalPower := by
+/-
+irrational_power_irrational_rational : ∃ a b, Irrational a ∧ Irrational b ∧ ¬Irrational (a ^ b)
+-/
+#check irrational_power_irrational_rational
+
+/--
+A structure that contains irrational numbers `a` and `b` such that `a^b` is rational along with proofs.
+-/
+structure IrrationalPair where
+  (a b : ℝ)
+  (irrational_a : Irrational a)
+  (irrational_b : Irrational b)
+  (rational_ab : ¬ Irrational (a^b))
+
+/--
+Noncomputable function that returns an `IrrationalPair`, i.e., irrational numbers `a` and `b` such that `a^b` is rational.
+-/
+noncomputable def irrationalPair : IrrationalPair := by
   apply Classical.choice
-  let ⟨a, b, pf₁, pf₂, pf₃⟩ := exists_irrationals_pow_rational
-  use a, b, pf₁, pf₂, pf₃
+  let ⟨a, b, h₁, h₂, h₃⟩ := irrational_power_irrational_rational
+  exact ⟨a, b, h₁, h₂, h₃⟩
 
-noncomputable def irrationalPairWithRationalPower' :
-    {ab : ℝ × ℝ  //
-      Irrational ab.1 ∧ Irrational ab.2 ∧ ¬ Irrational (ab.1 ^ ab.2)} := by
-      apply Classical.choice
-      let ⟨a, b, pf⟩ := exists_irrationals_pow_rational
-      use (a, b)
+#check Nonempty
 
-noncomputable def magicPair : ℝ × ℝ :=
-  (irrationalPairWithRationalPower.a, irrationalPairWithRationalPower.b)
+/--
+A noncomputable function that returns an `IrrationalPair`, i.e., irrational numbers `a` and `b` such that `a^b` is rational, represented as a subtype.
+-/
+noncomputable def irrationalPair' :
+  {ab: ℝ × ℝ // Irrational ab.1 ∧ Irrational ab.2 ∧ ¬ Irrational (ab.1 ^ ab.2)} := by
+  apply Classical.choice
+  let ⟨a, b, h₁, h₂, h₃⟩ := irrational_power_irrational_rational
+  use (a, b)
+
+/-
+Subtype.{u} {α : Sort u} (p : α → Prop) : Sort (max 1 u)
+-/
+#check Subtype
