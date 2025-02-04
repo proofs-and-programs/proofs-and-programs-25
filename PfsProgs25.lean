@@ -10,6 +10,7 @@ import PfsProgs25.Unit05.HCF
 import PfsProgs25.Unit05.PowerIrrationals
 import PfsProgs25.Unit06.Answer
 import PfsProgs25.Unit06.MyInductives
+import PfsProgs25.Unit07.NatLogic
 /-!
 # Proofs and Programs 2025
 

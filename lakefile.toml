@@ -1,0 +1,18 @@
+name = "PfsProgs25"
+defaultTargets = ["PfsProgs25"]
+
+[leanOptions]
+pp.unicode.fun = true
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+version = "git#v4.15.0"
+
+[[require]]
+name = "LeanAideTools"
+git = "https://github.com/siddhartha-gadgil/LeanAideTools.git"
+rev = "main"
+
+[[lean_lib]]
+name = "PfsProgs25"
