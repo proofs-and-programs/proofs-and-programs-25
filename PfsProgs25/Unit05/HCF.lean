@@ -142,8 +142,6 @@ def bezoutPair (a b : ℕ ) : BezoutPair a b :=
       ⟩
 termination_by (b, a)
 
-#check Int.div_mul_cancel
-#check Int.div_add_mod
 -- #leansearch "Multiplication distributes over subtraction."
 
 /-

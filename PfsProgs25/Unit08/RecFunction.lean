@@ -70,10 +70,12 @@ error: failed to synthesize
 numerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is
   (fun x ↦ String) Nat.zero
 due to the absence of the instance above
+
 Additional diagnostic information may be available using the `set_option diagnostics true` command.
 ---
 error: failed to synthesize
   HMul ℕ ((fun x ↦ String) n) ((fun x ↦ String) n.succ)
+
 Additional diagnostic information may be available using the `set_option diagnostics true` command.
 -/
 #guard_msgs in

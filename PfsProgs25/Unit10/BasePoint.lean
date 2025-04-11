@@ -19,6 +19,7 @@ class Alone where
 /--
 error: failed to synthesize
   Alone
+
 Additional diagnostic information may be available using the `set_option diagnostics true` command.
 -/
 #guard_msgs in
@@ -46,7 +47,7 @@ def myAlone {alone: Alone} : Bool := alone.alone
 
 /--
 error: don't know how to synthesize implicit argument 'alone'
-  @myAlone ?m.36
+  @myAlone ?m.37
 context:
 ⊢ Alone
 -/
@@ -176,6 +177,7 @@ constructor:
 /--
 error: failed to synthesize
   HAdd String Bool ?_
+
 Additional diagnostic information may be available using the `set_option diagnostics true` command.
 -/
 #guard_msgs in

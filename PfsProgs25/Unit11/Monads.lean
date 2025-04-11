@@ -100,6 +100,8 @@ end Stack
 /-!
 ## Why flatten: example
 -/
+
+namespace Monads
 def half? (n : Nat) : Option Nat :=
   if n % 2 = 0 then some (n / 2) else none
 
@@ -130,3 +132,4 @@ def quarter?' (n : Nat) : Option Nat :=
 /-!
 A simple monad is `Id`, which is just the identity function. It is useful for writing `do` blocks that do not involve any monadic operations.
 -/
+end Monads

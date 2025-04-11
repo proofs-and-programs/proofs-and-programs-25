@@ -74,7 +74,6 @@ def solve (a b c: ℤ) : Solution a b c := by
     apply dvd_add <;> assumption
 
 #check mul_right_cancel
-#check Int.mul_div_cancel
 
 end Diophantine
 

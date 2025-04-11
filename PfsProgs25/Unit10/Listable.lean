@@ -27,7 +27,7 @@ theorem memElemList
 /-
 [1, 3, 3, 9, 5, 15]
 -/
-#eval List.flatMap [1, 3, 5] (fun x => [x, x * 3])
+#eval List.flatMap  (fun x => [x, x * 3]) [1, 3, 5]
 
 instance prodListable {α β : Type u}
     [Listable α] [Listable β] : Listable (α × β) where
@@ -75,6 +75,7 @@ def g (n : ℕ) : ℕ := n + 2
 /--
 error: failed to synthesize
   Decidable (f = g)
+
 Additional diagnostic information may be available using the `set_option diagnostics true` command.
 -/
 #guard_msgs in

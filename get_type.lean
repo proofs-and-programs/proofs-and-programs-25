@@ -13,14 +13,18 @@ def main (args: List String) : IO Unit := do
       | some f => do
         let lines ←  IO.FS.lines (System.mkFilePath [f])
         pure <| lines.map fun s => s.toName
+    let mut count := 0
     for name in names do
+      if count % 1000 == 0 then
+        IO.eprintln s!"completed: {count} / {names.size}"
       let core :=
         getTypeCore name
       let eio? :=  core.run' {fileName := "", fileMap := {source:= "", positions := #[]}} {env := env}
       let io? ←  eio?.toIO'
+      count := count + 1
       match io? with
       | Except.ok (some v) =>
         let js := Json.mkObj [("name", toJson name), ("type", v.pretty)]
         IO.println s!"{js.compress}"
-      | Except.ok none => IO.println s!"none: type not found for {name}"
-      | Except.error e => IO.println s!"{← e.toMessageData.toString}"
+      | Except.ok none => IO.eprintln s!"none: type not found for {name}"
+      | Except.error e => IO.eprintln s!"{← e.toMessageData.toString}"
