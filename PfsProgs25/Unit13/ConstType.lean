@@ -1,7 +1,12 @@
 import Lean
 
 open Lean Meta Elab Term Tactic
+/-!
+# Lookup the type of a constant
 
+We illustrate how to look up the type of a constant in the environment.
+We can use the `getEnv` function to get the environment and then use the `find?` function to look up a constant by its name. The result is an optional value of type `ConstantInfo`. We can then use the `ppExpr` function to pretty-print the type of the constant.
+-/
 def getTypeM (name : Name) : MetaM <| Option Format := do
   let env ← getEnv
   env.find? name |>.mapM

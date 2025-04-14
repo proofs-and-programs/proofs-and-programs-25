@@ -10,10 +10,19 @@ We have already seen one special case of inductive types: structures. We will no
 * Recursive Inductive types
 -/
 
+/--
+An inductive type `ShortAnswer` with three terms of type `ShortAnswer`:
+* `yes`
+* `no`
+* `maybe`
+-/
 inductive ShortAnswer where
 | yes | no | maybe
 deriving Inhabited, Repr, DecidableEq
 
+/--
+An analogue of the logical "or" for `ShortAnswer`.
+-/
 def ShortAnswer.or (a b : ShortAnswer) : ShortAnswer :=
   match a, b with
   | yes, _ => yes
@@ -24,6 +33,9 @@ def ShortAnswer.or (a b : ShortAnswer) : ShortAnswer :=
   | no, maybe => maybe
 
 
+/-
+ShortAnswer.maybe
+-/
 #eval  ShortAnswer.or .no ShortAnswer.maybe
 
 -- `open blah` means that we can write `blah.damn` as just `damn`.

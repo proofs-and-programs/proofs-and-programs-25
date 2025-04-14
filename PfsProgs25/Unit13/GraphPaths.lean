@@ -1,4 +1,7 @@
 import Mathlib
+/-!
+A digression to discuss graphs and paths. We will use the `SimpleGraph` library in Lean 4. This was to help with a project.
+-/
 
 #check SimpleGraph
 

@@ -35,6 +35,10 @@ This is a more subtle notion. We will return to this later. We have already seen
 
 We see various kinds of trees, giving various inductive types.
 -/
+
+/--
+A simple binary tree.
+-/
 inductive BinTree (α : Type) where
   | leaf (label: α) : BinTree α
   | node : BinTree α → BinTree α → BinTree α
@@ -75,6 +79,9 @@ BinTree.node (BinTree.node (BinTree.leaf 3) (BinTree.leaf 4)) (BinTree.leaf 5)
 -/
 #check BinTree.rec
 
+/--
+Sum of the labels of a tree.
+-/
 def sum : BinTree ℕ → ℕ
   | leaf a => a
   | node t₁ t₂ => sum t₁ + sum t₂
@@ -95,12 +102,18 @@ inductive BinTree' (α : Type) where
   | leaf (label: α) : BinTree' α
 deriving Inhabited, Repr
 
+/-
+BinTree'.rec : (BinTree' ℕ → BinTree' ℕ → ℤ → ℤ → ℤ) → (ℕ → ℤ) → BinTree' ℕ → ℤ
+-/
 #check BinTree'.rec (α := ℕ)  (motive := fun _ => ℤ)
 
 def natListSum : List ℕ → ℕ
   | [] => 0
   | head::tail => head + natListSum tail
 
+/--
+A different construction of a binary tree.
+-/
 inductive BoolTree (α : Type) where
   | leaf (a: α ) : BoolTree α
   | node : (Bool → BoolTree α) → BoolTree α
@@ -114,22 +127,35 @@ def eg₂ : BoolTree ℕ := node (fun _ => leaf 3)
 def eg₃ : BoolTree ℕ :=
   node (fun b => if b then leaf 3 else leaf 4)
 
+/--
+The list of labels of a tree.
+-/
 def toList {α : Type} : BoolTree α → List α
   | leaf a => [a]
   | node f => toList (f true) ++ toList (f false)
 
+/--
+The binary tree corresponding to a `BoolTree`.
+-/
 def toBinTree {α : Type} : BoolTree α  → BinTree α
   | leaf a => BinTree.leaf a
   | node f => BinTree.node (toBinTree (f true)) (toBinTree (f false))
 
 #eval eg₃.toBinTree.toList
 
+/--
+The `BoolTree` corresponding to a binary tree.
+-/
 def ofBinTree {α : Type} : BinTree α → BoolTree α
   | BinTree.leaf a => leaf a
   | BinTree.node t₁ t₂ => node (fun b => if b then ofBinTree t₁ else ofBinTree t₂)
 
 end BoolTree
 
+/--
+A tree with a list of trees as children.
+This is a more general form of `BinTree` and `BoolTree`.
+-/
 inductive ListTree (α : Type) where
   | leaf (a: α) : ListTree α
   | node : List (ListTree α) → ListTree α
@@ -227,12 +253,18 @@ constructor:
 -/
 #print Fin
 
+/--
+A tree with a finite collection of trees as children, indexed by `Fin n`.
+-/
 inductive FinTree (α : Type) where
   | leaf (a: α) : FinTree α
   | node : {n : ℕ} →  (Fin n → FinTree α) → FinTree α
 
 namespace FinTree
 
+/--
+The `FinTree` associated to a binary tree.
+-/
 def ofBinTree {α : Type} : BinTree α → FinTree α
   | BinTree.leaf a => leaf a
   | BinTree.node t₁ t₂ =>
@@ -257,6 +289,11 @@ FinTree.rec : (ℕ → ℤ) → ({n : ℕ} → (Fin n → FinTree ℕ) → (Fin 
 -/
 #check FinTree.rec (α := ℕ)  (motive := fun _ => ℤ)
 
+/-!
+## Cantor's theorem
+
+We illustrate what is **not** allowed in defining inductive types, and why.
+-/
 namespace CantorTree
 
 /--

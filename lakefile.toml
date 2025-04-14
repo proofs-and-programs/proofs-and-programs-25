@@ -20,3 +20,6 @@ name = "PfsProgs25"
 [[lean_exe]]
 name = "get_type"
 supportInterpreter = true
+
+[[lean_exe]]
+name = "quicksort"

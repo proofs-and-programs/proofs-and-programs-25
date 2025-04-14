@@ -92,6 +92,11 @@ def cubeGeneric {α: Type} [Mul α]
   (n: α) : α := n * n * n
 
 set_option pp.all true in
+/-
+def cubeGeneric : {α : Type} → [inst : Mul.{0} α] → α → α :=
+fun {α : Type} [inst : Mul.{0} α] (n : α) ↦
+  @HMul.hMul.{0, 0, 0} α α α (@instHMul.{0} α inst) (@HMul.hMul.{0, 0, 0} α α α (@instHMul.{0} α inst) n n) n
+-/
 #print cubeGeneric
 
 #eval cubeGeneric (-2 : Int) -- -8

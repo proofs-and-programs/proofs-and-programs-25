@@ -74,6 +74,9 @@ partial def not_wrong {α : Type} [Nonempty α] (x : Nat ) : α := not_wrong x
 
 #check not_wrong (α := ℝ) 0 -- ℝ
 
+/--
+The result that the GCD of two numbers divides both numbers.
+-/
 theorem hcf_dvd (a b : ℕ) : hcf a b ∣ a ∧ hcf a b ∣ b := by
   if h:b=0 then
     simp [h, hcf]
@@ -105,11 +108,17 @@ termination_by (b, a)
 
 -- #leansearch "A number is the sum of the remainder and the product of the quotient and the divisor."
 
+/--
+A structure that represents a Bezout pair of integers `x` and `y` such that `x * a + y * b = hcf a b`.
+-/
 structure BezoutPair (a b : ℕ) where
   x  : ℤ
   y  : ℤ
   eqn : x * a + y * b = hcf a b
 
+/--
+The function `bezoutPair` computes a pair of integers such that `x * a + y * b = hcf a b`.
+-/
 def bezoutPair (a b : ℕ ) : BezoutPair a b :=
   if h:b = 0 then
     ⟨1, 0, by simp [h, hcf]⟩
@@ -136,7 +145,7 @@ def bezoutPair (a b : ℕ ) : BezoutPair a b :=
         nth_rewrite 1 [← r]
         simp
         rw [sub_eq_add_neg, add_comm y, ← neg_mul, add_mul, mul_assoc (-x), neg_mul, ← add_assoc, ← sub_eq_add_neg, ← Int.mul_sub]
-        simp
+        simp only [add_left_inj, mul_eq_mul_left_iff]
         left
         ring
       ⟩

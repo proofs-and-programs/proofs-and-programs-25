@@ -16,6 +16,9 @@ instance : Listable Bool where
     intro a
     cases a <;> simp
 
+/-!
+After defining a typeclass, we generally define functions that allow access to the fields of the typeclass.
+-/
 
 def elemsList (α : Type u) [Listable α] : List α :=
   Listable.elems
@@ -29,6 +32,9 @@ theorem memElemList
 -/
 #eval List.flatMap  (fun x => [x, x * 3]) [1, 3, 5]
 
+/--
+The product of `Listable` types is `Listable`.
+-/
 instance prodListable {α β : Type u}
     [Listable α] [Listable β] : Listable (α × β) where
   elems :=
@@ -116,6 +122,9 @@ fun α ↦ (a b : α) → Decidable (a = b)
 -/
 #print DecidableEq
 
+/--
+`decidableFunctionEqual` is a function that takes two functions `f` and `g` of type `α → β`, and a list `l` of type `List α`, and returns a decidable proposition stating whether the two functions are equal on all elements of the list.
+-/
 def List.decidableFunctionEqual {α β : Type}[DecidableEq β]
     (f g : α → β) (l: List α) : Decidable (∀ x ∈ l,  f x = g x) :=
   by
@@ -132,6 +141,9 @@ def List.decidableFunctionEqual {α β : Type}[DecidableEq β]
         intro h'
         simp [p] at h'
 
+/--
+Given two functions with domains the same `Listable` type and codomains equal with decidable equality, we can decide if they are equal.
+-/
 instance decidableEqFns_of_Listable {α β : Type}
     [Listable α] [DecidableEq β]
     (f g : α → β) : Decidable (f = g) := by

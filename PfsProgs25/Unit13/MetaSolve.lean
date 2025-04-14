@@ -1,6 +1,8 @@
 import Lean
 import Mathlib
 import PfsProgs25.Unit13.CustomSorry
+import Qq
+open Qq
 /-!
 Given the expression of a term, we can try to directly match it, and there are helpers for this. But there is a smarter way using Lean's unification function `isDefEq`.
 

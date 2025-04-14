@@ -17,9 +17,21 @@ structure NatSqrt (n : Nat) where
   val : Nat
   isSqrt : val * val = n
 
+/-
+⊢ Nat → Type
+-/
 #check NatSqrt
+/-
+⊢ {n : Nat} → (val : Nat) → val * val = n → NatSqrt n
+-/
 #check NatSqrt.mk
+/-
+⊢ {n : Nat} → NatSqrt n → Nat
+-/
 #check NatSqrt.val
+/-
+⊢ ∀ {n : Nat} (self : NatSqrt n), self.val * self.val = n
+-/
 #check NatSqrt.isSqrt
 
 def sqrt4 : NatSqrt 4 := ⟨2, rfl⟩ -- angle brackets can be used to input the structure
