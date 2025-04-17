@@ -45,9 +45,10 @@ Alone.alone [self : Alone] : Bool
 
 def myAlone {alone: Alone} : Bool := alone.alone
 
+set_option pp.mvars.anonymous false in
 /--
 error: don't know how to synthesize implicit argument 'alone'
-  @myAlone ?m.37
+  @myAlone ?_
 context:
 ⊢ Alone
 -/

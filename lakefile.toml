@@ -7,7 +7,7 @@ pp.unicode.fun = true
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-version = "git#v4.18.0"
+version = "git#v4.19.0-rc3"
 
 [[require]]
 name = "LeanAideTools"
