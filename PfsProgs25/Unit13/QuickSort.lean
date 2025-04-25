@@ -25,9 +25,26 @@ We define `smaller` and `larger` using `List.filter`. We need some theorems rela
 
 variable {α : Type}[LinearOrder α]
 
+/--
+List consisting of elements of `l` smaller than or equal to the pivot.
+
+In Python, this would be:
+```python
+def smaller(pivot, l):
+    return [x for x in l if x <= pivot]
+```
+-/
 def smaller (pivot : α) (l : List α) : List α :=
   l.filter (fun x => x ≤  pivot)
 
+/--
+List consisting of elements of `l` larger than the pivot.
+In Python, this would be:
+```python
+def larger(pivot, l):
+    return [x for x in l if x > pivot]
+```
+-/
 def larger (pivot : α) (l : List α) : List α :=
   l.filter (fun x => x > pivot)
 
@@ -69,8 +86,7 @@ theorem quickSort_cons (pivot : α) (l : List α) :
 /--
 A term `x ∈ α` is in `l` if and only if it is in the smaller or larger list.
 -/
-theorem mem_iff_below_or_above_pivot (pivot : α) (l : List α)(x : α) :
-    x ∈ l ↔ x ∈ smaller pivot l ∨ x ∈ larger pivot l := by
+theorem mem_iff_below_or_above_pivot (pivot : α) (l : List α)(x : α) : x ∈ l ↔ x ∈ smaller pivot l ∨ x ∈ larger pivot l := by
   apply Iff.intro
   unfold smaller larger
   · intro h
@@ -130,8 +146,7 @@ inductive Sorted : List α → Prop
 If we append two sorted lists, the result is sorted if there is a `bound` such that all elements in the first list are less than or equal to `bound` and all elements in the second list are greater than or equal to `bound`.
 This is a helper theorem for the main theorem.
 -/
-theorem append_sorted (bound: α)(l₁ l₂ : List α) :
-  (∀ x ∈ l₁, x ≤ bound) → (∀ x ∈ l₂, bound ≤  x) → Sorted l₁ → Sorted l₂ → Sorted (l₁ ++ l₂) := by
+theorem append_sorted (bound: α)(l₁ l₂ : List α) : (∀ x ∈ l₁, x ≤ bound) → (∀ x ∈ l₂, bound ≤  x) → Sorted l₁ → Sorted l₂ → Sorted (l₁ ++ l₂) := by
   intro h₁ h₂ s₁
   induction s₁ with
   | nil => simp

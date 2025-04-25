@@ -7,7 +7,7 @@ def main (args: List String) : IO Unit := do
   let mut l := #[]
   for _ in [0:n] do
     l := l.push (← IO.rand 0 m)
-  IO.println s!"Sorting random list (naive) of size {n} with max value {m}"
+  IO.println s!"Sorting random list of size {n} with max value {m}"
   let l' := l.toList
   let start ← IO.monoMsNow
   let sorted := quickSort l'
