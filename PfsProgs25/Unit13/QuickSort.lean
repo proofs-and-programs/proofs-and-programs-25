@@ -35,7 +35,7 @@ def smaller(pivot, l):
 ```
 -/
 def smaller (pivot : α) (l : List α) : List α :=
-  l.filter (fun x => x ≤  pivot)
+  l.filter (·  ≤  pivot)
 
 /--
 List consisting of elements of `l` larger than the pivot.
@@ -46,7 +46,7 @@ def larger(pivot, l):
 ```
 -/
 def larger (pivot : α) (l : List α) : List α :=
-  l.filter (fun x => x > pivot)
+  l.filter (·  > pivot)
 
 /--
 The `quickSort` function that performs the quicksort algorithm. We do not prove termination for this function.
